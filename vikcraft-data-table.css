@@ -1,0 +1,584 @@
+/*
+ * VikCraft Interactive Data Table Stylesheet
+ * Version 1.2.0
+ *
+ * This file contains all the necessary styles for the vikcraft Data Table.
+ * All styles are namespaced under the '.vikcraft-data-table-wrapper' class 
+ * to prevent conflicts with other styles on your page.
+ */
+
+/* Main container for the table and its controls */
+.vikcraft-data-table-wrapper {
+    font-family: 'Inter', sans-serif;
+    background-color: #ffffff;
+    color: #333;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    overflow: hidden;
+    border: 1px solid #dee2e6;
+    width: 100%;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+/* --- Grouping Drop Zone --- */
+.vikcraft-data-table-wrapper .group-by-container {
+    padding: 15px 20px;
+    background-color: #f8f9fa;
+    border-bottom: 1px solid #dee2e6;
+    min-height: 50px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    transition: background-color 0.2s, border-color 0.2s;
+}
+.vikcraft-data-table-wrapper .group-by-container.drag-over {
+    background-color: #e9ecef;
+    border-color: #4a90e2;
+    box-shadow: inset 0 0 10px rgba(74, 144, 226, 0.2);
+}
+.vikcraft-data-table-wrapper .group-by-placeholder {
+    color: #6c757d;
+    font-style: italic;
+    font-size: 14px;
+}
+.vikcraft-data-table-wrapper .group-by-tag {
+    display: inline-flex;
+    align-items: center;
+    background-color: #4a90e2;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 15px;
+    font-size: 13px;
+    font-weight: 500;
+}
+.vikcraft-data-table-wrapper .group-by-tag .remove-group {
+    margin-left: 8px;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 16px;
+    line-height: 1;
+}
+.vikcraft-data-table-wrapper .group-by-tag .remove-group:hover {
+    color: #f1f3f5;
+}
+
+
+/* Header section with search and page length controls */
+.vikcraft-data-table-wrapper .table-controls {
+    padding: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 15px;
+    background-color: #f8f9fa;
+    border-bottom: 1px solid #dee2e6;
+    transition: background-color 0.3s, border-color 0.3s;
+}
+
+.vikcraft-data-table-wrapper .search-container input,
+.vikcraft-data-table-wrapper .page-length-container select {
+    padding: 10px 15px;
+    border: 1px solid #ced4da;
+    border-radius: 8px;
+    font-size: 14px;
+    background-color: #fff;
+    color: #333;
+    transition: all 0.3s ease;
+}
+
+.vikcraft-data-table-wrapper .search-container input {
+    width: 250px;
+}
+
+.vikcraft-data-table-wrapper .search-container input:focus {
+    outline: none;
+    border-color: #4a90e2;
+    box-shadow: 0 0 0 3px rgba(74, 144, 226, 0.2);
+}
+
+.vikcraft-data-table-wrapper .page-length-container label {
+    margin-right: 8px;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.vikcraft-data-table-wrapper .page-length-container select {
+    cursor: pointer;
+}
+
+/* Table wrapper for scrolling */
+.vikcraft-data-table-wrapper .table-wrapper {
+    overflow-x: auto;
+}
+
+.vikcraft-data-table-wrapper table.interactive-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+/* Table header styles */
+.vikcraft-data-table-wrapper thead {
+    background-color: #f1f3f5;
+    transition: background-color 0.3s;
+}
+
+.vikcraft-data-table-wrapper th {
+    padding: 15px;
+    text-align: left;
+    font-weight: 600;
+    font-size: 14px;
+    color: #495057;
+    text-transform: capitalize;
+    position: relative;
+    white-space: nowrap;
+}
+.vikcraft-data-table-wrapper th.draggable {
+    cursor: grab;
+}
+.vikcraft-data-table-wrapper th.dragging {
+    opacity: 0.5;
+    background: #e9ecef;
+}
+
+.vikcraft-data-table-wrapper th.group-header {
+    text-align: center;
+    background-color: #e9ecef;
+    border-bottom: 1px solid #dee2e6;
+}
+
+.vikcraft-data-table-wrapper th.sortable {
+    cursor: pointer;
+    user-select: none;
+    transition: background-color 0.2s ease;
+}
+
+.vikcraft-data-table-wrapper th.sortable:hover {
+    background-color: #e9ecef;
+}
+
+.vikcraft-data-table-wrapper th.sortable .sort-indicator {
+    display: inline-block;
+    margin-left: 8px;
+    opacity: 0.5;
+    transition: opacity 0.2s ease;
+}
+
+.vikcraft-data-table-wrapper th.sortable.asc .sort-indicator,
+.vikcraft-data-table-wrapper th.sortable.desc .sort-indicator {
+    opacity: 1;
+}
+
+.vikcraft-data-table-wrapper th.sortable.asc .sort-indicator::after { content: ' ▲'; color: #4a90e2; }
+.vikcraft-data-table-wrapper th.sortable.desc .sort-indicator::after { content: ' ▼'; color: #4a90e2; }
+
+.vikcraft-data-table-wrapper .resize-handle {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 5px;
+    height: 100%;
+    cursor: col-resize;
+    user-select: none;
+}
+
+/* --- Advanced Filter Styles --- */
+/* --- Advanced Filter Styles --- */
+.vikcraft-data-table-wrapper .filter-cell {
+    display: flex;
+    align-items: center;
+    gap: 0; /* Remove gap as we position the icon inside */
+    position: relative; /* Crucial for positioning the dropdown */
+}
+
+/* Style for the new clickable filter icon */
+.vikcraft-data-table-wrapper .filter-icon {
+    position: absolute;
+    left: 8px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    color: #888;
+    font-size: 10px;
+    padding: 4px;
+    transition: color 0.2s;
+}
+.vikcraft-data-table-wrapper .filter-icon:hover {
+    color: #333;
+}
+
+/* The operator dropdown is now hidden by default */
+.vikcraft-data-table-wrapper .filter-cell select.filter-operator {
+    display: none; /* Hide by default */
+    position: absolute;
+    top: 100%; /* Position it below the filter cell */
+    left: 0;
+    z-index: 100;
+    margin-top: 4px;
+    padding: 8px;
+    border: 1px solid #ced4da;
+    border-radius: 6px;
+    font-size: 13px;
+    background-color: #fff;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+/* This class, toggled by JS, makes the dropdown visible */
+.vikcraft-data-table-wrapper .filter-cell.show-operator select.filter-operator {
+    display: block;
+}
+
+/* The filter input now needs padding on the left to not overlap the icon */
+.vikcraft-data-table-wrapper .filter-cell input.filter-input {
+    width: 100%;
+    padding: 8px 8px 8px 28px; /* Added left padding for the icon */
+    box-sizing: border-box;
+    border: 1px solid #ced4da;
+    border-radius: 6px;
+    font-size: 13px;
+    background-color: #fff;
+    color: #333;
+}
+.vikcraft-data-table-wrapper .filter-cell input.filter-input::placeholder {
+    color: #adb5bd;
+}
+
+/* --- Dark Theme Adjustments for Filters --- */
+.vikcraft-data-table-wrapper.theme-dark .filter-icon {
+    color: #adb5bd;
+}
+.vikcraft-data-table-wrapper.theme-dark .filter-icon:hover {
+    color: #f8f9fa;
+}
+.vikcraft-data-table-wrapper.theme-dark .filter-cell select.filter-operator {
+    background-color: #495057;
+    border-color: #6c757d;
+    color: #f8f9fa;
+}
+
+/* Table body styles */
+.vikcraft-data-table-wrapper tbody tr {
+    border-bottom: 1px solid #dee2e6;
+    transition: background-color 0.2s ease, border-color 0.3s;
+}
+
+.vikcraft-data-table-wrapper tbody tr:last-child {
+    border-bottom: none;
+}
+
+.vikcraft-data-table-wrapper tbody tr:hover {
+    background-color: #f1f3f5;
+}
+
+/* --- Group Row Styles --- */
+.vikcraft-data-table-wrapper tbody tr.group-row {
+    background-color: #e9ecef;
+    font-weight: 600;
+    cursor: pointer;
+}
+.vikcraft-data-table-wrapper tbody tr.group-row:hover {
+    background-color: #dde2e6;
+}
+.vikcraft-data-table-wrapper tbody tr.group-row td {
+    color: #343a40;
+}
+.vikcraft-data-table-wrapper .group-toggle-icon {
+    display: inline-block;
+    width: 20px;
+    text-align: center;
+    transition: transform 0.2s ease;
+}
+.vikcraft-data-table-wrapper .group-toggle-icon.collapsed {
+    transform: rotate(-90deg);
+}
+
+.vikcraft-data-table-wrapper td {
+    padding: 15px;
+    font-size: 14px;
+    color: #495057;
+    white-space: nowrap;
+    transition: color 0.3s;
+}
+
+.vikcraft-data-table-wrapper td.checkbox-cell,
+.vikcraft-data-table-wrapper th.checkbox-cell {
+    width: 50px;
+    text-align: center;
+}
+
+.vikcraft-data-table-wrapper input[type="checkbox"] {
+    cursor: pointer;
+    width: 18px;
+    height: 18px;
+}
+
+/* Action button styles */
+.vikcraft-data-table-wrapper .action-button {
+    padding: 8px 12px;
+    margin-right: 5px;
+    border: none;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    color: #fff;
+}
+.vikcraft-data-table-wrapper .btn-edit { background-color: #4a90e2; }
+.vikcraft-data-table-wrapper .btn-edit:hover { background-color: #357abd; }
+.vikcraft-data-table-wrapper .btn-delete { background-color: #d0021b; }
+.vikcraft-data-table-wrapper .btn-delete:hover { background-color: #a30215; }
+
+/* Pagination controls */
+.vikcraft-data-table-wrapper .pagination-controls {
+    padding: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 15px;
+    background-color: #f8f9fa;
+    border-top: 1px solid #dee2e6;
+    transition: background-color 0.3s, border-color 0.3s;
+}
+
+.vikcraft-data-table-wrapper .pagination-info {
+    font-size: 14px;
+    color: #6c757d;
+}
+
+.vikcraft-data-table-wrapper .pagination-buttons button {
+    padding: 8px 12px;
+    margin: 0 4px;
+    border: 1px solid #ced4da;
+    background-color: #fff;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    color: #333;
+}
+
+.vikcraft-data-table-wrapper .pagination-buttons button:disabled {
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+.vikcraft-data-table-wrapper .pagination-buttons button.active,
+.vikcraft-data-table-wrapper .pagination-buttons button:not(:disabled):hover {
+    background-color: #4a90e2;
+    color: #fff;
+    border-color: #4a90e2;
+}
+
+
+/* --- THEME: DARK --- */
+.vikcraft-data-table-wrapper.theme-dark {
+    background-color: #212529;
+    color: #e9ecef;
+    border-color: #495057;
+}
+.vikcraft-data-table-wrapper.theme-dark .group-by-container {
+    background-color: #343a40;
+    border-color: #495057;
+}
+.vikcraft-data-table-wrapper.theme-dark .group-by-placeholder {
+    color: #adb5bd;
+}
+.vikcraft-data-table-wrapper.theme-dark .table-controls,
+.vikcraft-data-table-wrapper.theme-dark .pagination-controls {
+    background-color: #343a40;
+    border-color: #495057;
+}
+.vikcraft-data-table-wrapper.theme-dark .search-container input,
+.vikcraft-data-table-wrapper.theme-dark .page-length-container select,
+.vikcraft-data-table-wrapper.theme-dark .filter-cell select.filter-operator,
+.vikcraft-data-table-wrapper.theme-dark .filter-cell input.filter-input {
+    background-color: #495057;
+    border-color: #6c757d;
+    color: #f8f9fa;
+}
+.vikcraft-data-table-wrapper.theme-dark .search-container input::placeholder,
+.vikcraft-data-table-wrapper.theme-dark .filter-cell input.filter-input::placeholder {
+    color: #adb5bd;
+}
+.vikcraft-data-table-wrapper.theme-dark thead {
+    background-color: #343a40;
+}
+.vikcraft-data-table-wrapper.theme-dark th {
+    color: #f8f9fa;
+}
+.vikcraft-data-table-wrapper.theme-dark th.group-header {
+    background-color: #495057;
+    border-color: #6c757d;
+}
+.vikcraft-data-table-wrapper.theme-dark th.sortable:hover {
+    background-color: #495057;
+}
+.vikcraft-data-table-wrapper.theme-dark tbody tr {
+    border-color: #495057;
+}
+.vikcraft-data-table-wrapper.theme-dark tbody tr:hover {
+    background-color: #343a40;
+}
+.vikcraft-data-table-wrapper.theme-dark tbody tr.group-row {
+    background-color: #495057;
+}
+.vikcraft-data-table-wrapper.theme-dark tbody tr.group-row:hover {
+    background-color: #5a6268;
+}
+.vikcraft-data-table-wrapper.theme-dark tbody tr.group-row td {
+    color: #f8f9fa;
+}
+.vikcraft-data-table-wrapper.theme-dark td {
+    color: #e9ecef;
+}
+.vikcraft-data-table-wrapper.theme-dark .pagination-info {
+    color: #adb5bd;
+}
+.vikcraft-data-table-wrapper.theme-dark .pagination-buttons button {
+    background-color: #495057;
+    border-color: #6c757d;
+    color: #f8f9fa;
+}
+.vikcraft-data-table-wrapper.theme-dark .pagination-buttons button:disabled {
+    opacity: 0.5;
+}
+.vikcraft-data-table-wrapper.theme-dark .pagination-buttons button.active,
+.vikcraft-data-table-wrapper.theme-dark .pagination-buttons button:not(:disabled):hover {
+    background-color: #0d6efd;
+    border-color: #0d6efd;
+    color: #fff;
+}
+
+
+/* --- THEME: NARROW --- */
+.vikcraft-data-table-wrapper.theme-narrow th,
+.vikcraft-data-table-wrapper.theme-narrow td {
+    padding: 8px 10px;
+}
+.vikcraft-data-table-wrapper.theme-narrow .action-button {
+    padding: 6px 10px;
+    font-size: 12px;
+}
+.vikcraft-data-table-wrapper.theme-narrow .table-controls,
+.vikcraft-data-table-wrapper.theme-narrow .pagination-controls {
+    padding: 15px;
+}
+
+/* Add this new style for the export button */
+.vikcraft-data-table-wrapper .gdt-excel-export-button {
+    padding: 10px 15px;
+    border: 1px solid #28a745;
+    background-color: #28a745;
+    color: white;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    transition: background-color 0.2s;
+}
+
+.vikcraft-data-table-wrapper .gdt-excel-export-button:hover {
+    background-color: #218838;
+}
+
+/* Modify the table-controls to use flexbox more effectively */
+.vikcraft-data-table-wrapper .table-controls {
+    padding: 15px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 15px;
+    background-color: #f8f9fa;
+    border-bottom: 1px solid #dee2e6;
+    transition: background-color 0.3s, border-color 0.3s;
+}
+
+/* NEW: Add containers to group controls */
+.vikcraft-data-table-wrapper .controls-left,
+.vikcraft-data-table-wrapper .controls-right {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+/* Add this new style for the export button */
+.vikcraft-data-table-wrapper .gdt-excel-export-button {
+    padding: 10px 15px;
+    border: 1px solid #28a745;
+    background-color: #28a745;
+    color: white;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    transition: background-color 0.2s;
+}
+
+.vikcraft-data-table-wrapper .gdt-excel-export-button:hover {
+    background-color: #218838;
+}
+
+/* Modify the table-controls to use flexbox more effectively */
+.vikcraft-data-table-wrapper .table-controls {
+    padding: 15px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 15px;
+    background-color: #f8f9fa;
+    border-bottom: 1px solid #dee2e6;
+    transition: background-color 0.3s, border-color 0.3s;
+}
+
+/* NEW: Add containers to group controls */
+.vikcraft-data-table-wrapper .controls-left,
+.vikcraft-data-table-wrapper .controls-right {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+/* --- NEW: Styles for Editable Cells --- */
+.vikcraft-data-table-wrapper td.editable-cell {
+    cursor: pointer;
+    position: relative; /* For positioning the input/select */
+}
+
+.vikcraft-data-table-wrapper td.editable-cell:hover {
+    background-color: #e6f7ff; /* Light blue hint on hover */
+}
+
+.vikcraft-data-table-wrapper.theme-dark td.editable-cell:hover {
+    background-color: #3b4249; /* Darker hint for dark theme */
+}
+
+.vikcraft-data-table-wrapper .gdt-edit-input,
+.vikcraft-data-table-wrapper .gdt-edit-select {
+    width: calc(100% - 10px); /* Adjust width for padding/border */
+    padding: 8px 5px;
+    border: 1px solid #4a90e2; /* Accent color for active editing */
+    border-radius: 4px;
+    font-size: 14px;
+    box-sizing: border-box; /* Include padding/border in element's total width and height */
+    background-color: #fff;
+    color: #333;
+}
+
+.vikcraft-data-table-wrapper .gdt-edit-checkbox {
+    width: 20px;
+    height: 20px;
+    vertical-align: middle;
+}
+
+/* Dark theme specific styles for edit inputs */
+.vikcraft-data-table-wrapper.theme-dark .gdt-edit-input,
+.vikcraft-data-table-wrapper.theme-dark .gdt-edit-select {
+    background-color: #343a40;
+    border-color: #6c757d;
+    color: #f8f9fa;
+}

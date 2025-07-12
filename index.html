@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VikCraft Interactive Data Table</title>
+    
+    <script src="https://cdn.sheetjs.com/xlsx-0.20.2/package/dist/xlsx.full.min.js"></script>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="vikcraft-data-table.css">
+
+    <style>
+        body {
+            background-color: #f0f2f5;
+            padding: 20px;
+            font-family: 'Inter', sans-serif;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 10px;
+        }
+        .controls {
+            max-width: 1200px;
+            margin: 0 auto 20px auto;
+            padding: 15px;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            text-align: center;
+        }
+        .controls button {
+            padding: 10px 15px;
+            margin: 5px;
+            border: 1px solid #ccc;
+            background-color: #f8f8f8;
+            border-radius: 6px;
+            cursor: pointer;
+            font-family: 'Inter', sans-serif;
+        }
+        .controls button:hover {
+            background-color: #e9e9e9;
+        }
+
+        .content-wrapper {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* Style for Custom CSS */
+        /* Default style for highly experienced employees */
+        .vikcraft-data-table-wrapper td.high-experience {
+            font-weight: bold;
+            color: #0056b3; /* A dark blue for light backgrounds */
+        }
+
+        /* Default style for the 'Active' status */
+        .vikcraft-data-table-wrapper td.status-active {
+            color: #218838; /* A dark green for light backgrounds */
+            font-weight: 500;
+        }
+
+        /* Default style for the 'Inactive' status */
+        .vikcraft-data-table-wrapper td.status-inactive {
+            color: #c82333; /* A dark red for light backgrounds */
+            font-style: italic;
+        }
+
+        /* --- DARK THEME OVERRIDES --- */
+
+        /* Lighter, more readable blue for dark backgrounds */
+        .vikcraft-data-table-wrapper.theme-dark td.high-experience {
+            color: #8ab4f8;
+        }
+
+        /* Lighter green for dark backgrounds */
+        .vikcraft-data-table-wrapper.theme-dark td.status-active {
+            color: #81c995;
+        }
+
+        /* Lighter red for dark backgrounds */
+        .vikcraft-data-table-wrapper.theme-dark td.status-inactive {
+            color: #f58989;
+        }
+
+        /* Default theme style for inactive rows */
+        .vikcraft-data-table-wrapper tr.row-inactive {
+            background-color: #fff0f1; /* Light pink/red background */
+        }
+
+        .vikcraft-data-table-wrapper tr.row-inactive td {
+            color: #c82333; /* Dark red text for all cells in the row */
+        }
+
+        /* --- DARK THEME OVERRIDE --- */
+        /* Override for dark mode to ensure readability */
+        .vikcraft-data-table-wrapper.theme-dark tr.row-inactive {
+            background-color: #5c1f26; /* A darker red background */
+        }
+
+        .vikcraft-data-table-wrapper.theme-dark tr.row-inactive td {
+            color: #f5c5cb; /* A lighter, more readable pink/red text */
+        }
+
+        /* --- NARROW THEME OVERRIDES (Optional) --- */
+
+        /* Example: Make the status text slightly smaller in narrow mode */
+        .vikcraft-data-table-wrapper.theme-narrow td.status-active,
+        .vikcraft-data-table-wrapper.theme-narrow td.status-inactive {
+            font-size: 13px;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>VikCraft Interactive Data Table</h1>
+    
+    <div class="controls">
+        <span>Toggle Theme:</span>
+        <button id="theme-default">Default</button>
+        <button id="theme-dark">Dark</button>
+        <button id="theme-narrow">Narrow</button>
+    </div>
+
+    <p style="text-align: center; max-width: 800px; margin: 0 auto; color: #555;">
+        This is a sample interactive data table built with VikCraft Data Table. It supports advanced features like inline editing, custom cell styling, and Excel export.
+        <br>
+        <ul>
+            <li><strong>Note:</strong> </li>
+            <li>The table is configured with sample data. For server-side functionality, you can uncomment the server-side setup section in the JavaScript code and provide your API endpoint.</li>
+            <li>Double click in editable cell for test inline-editing.</li>
+        </ul>
+    </p>
+
+    <!-- The container for your table -->
+    <div id="my-advanced-table" class="content-wrapper"></div>
+
+    <script src="vikcraft-data-table.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+
+            const myData = [
+                { id: 1, name: 'Alice', email: 'alice@example.com', age: 28, city: 'New York', salary: 70000, active: true },
+                { id: 2, name: 'Bob', email: 'bob@example.com', age: 35, city: 'Los Angeles', salary: 85000, active: false },
+                { id: 3, name: 'Charlie', email: 'charlie@example.com', age: 22, city: 'Chicago', salary: 60000, active: true },
+                { id: 4, name: 'David', email: 'david@example.com', age: 41, city: 'New York', salary: 120000, active: true },
+                { id: 5, name: 'Eve', email: 'eve@example.com', age: 29, city: 'Chicago', salary: 72000, active: false },
+                { id: 6, name: 'Frank', email: 'frank@example.com', age: 38, city: 'Los Angeles', salary: 95000, active: true },
+                { id: 7, name: 'Grace', email: 'grace@example.com', age: 25, city: 'New York', salary: 68000, active: true },
+                { id: 8, name: 'Heidi', email: 'heidi@example.com', age: 31, city: 'Chicago', salary: null, active: false },
+            ];
+            
+            const tableConfiguration = {
+                /*
+                // --- Server-Side Setup ---
+                serverSide: true,
+                ajax: 'http://localhost:8000/api/employees/', // Your server endpoint
+                method: 'POST', // Can be 'GET' or 'POST'
+                customFilters: {
+                    // Example of custom filters you might send to the server
+                    status_id: 'Active',
+                    total_experience: 10,
+                    csrfmiddlewaretoken: '8Qg9jcdIZBYTeN8UyeqGjN8tHdiqjERTtbRIRZW9UmfxL5rCkEidXDTI9Caeu27x',
+                }, */
+
+                data: myData, // Use the sample data defined above - DELETE THIS LINE IF USING SERVER-SIDE
+                columns: [
+                    // IMPORTANT: Define the 'type' for advanced filtering
+                    { key: 'id', label: 'ID', sortable: true, filterable: true, width: '80px', type: 'number' },
+                    { key: 'name', label: 'Full Name', sortable: true, filterable: true, editable:true, editType:'text', width: '150px', type: 'string' },
+                    { key: 'email', label: 'Email Address', sortable: true, filterable: true, editable:true, editType:'text', width: '220px', type: 'string' },
+                    { key: 'age', label: 'Age', sortable: true, filterable: true, editable:true, editType:'number', width: '80px', type: 'number' },
+                    { key: 'city', label: 'City', sortable: true, filterable: true, editable:true, editType:'dropdown', editOptions:['New York','Los Angeles','Chicago'], width: '150px', type: 'string' },
+                    { 
+                        key: 'salary', 
+                        label: 'Salary', 
+                        sortable: true, 
+                        filterable: true, 
+                        width: '120px', 
+                        type: 'number',
+                        editable:true, editType:'number',
+                        // --- NEW: Add cellStyler for this column ---
+                        cellStyler: function(cellValue, rowData) {
+                            if (cellValue > 85000) {
+                                // Return a class name to be added to the <td>
+                                return { className: 'high-experience' };
+                            }
+                        }
+                    },
+                    { key:'active',label:'Active', sortable:true, filterable:false, editable:true, editType:'checkbox' },
+                ],
+
+                // --- TOGGLE FEATURES HERE ---
+                enableCheckboxes: true,
+                enableSearch: true,
+                enableColumnFilter: true,
+                enablePagination: true,
+                enablePageLength: true,
+                enableColumnResize: true,
+                enableGrouping: true,
+                enableEditing: true, // <-- NEW: Enable inline editing
+
+                // --- NEW: Enable and Configure Excel Export ---
+                enableExcelExport: true,  // <-- SET TO TRUE
+                excelExportConfig: {
+                    title: 'Employee Report',
+                    subtitle: `Generated on: ${new Date().toLocaleDateString()}`,
+                    filename: 'employee_data_export.xlsx'
+                },
+                
+                actions: [
+                    { 
+                        label: 'View', 
+                        className: 'btn-edit', 
+                        onClick: (row) => alert(`Viewing user: ${row.name}`) 
+                    }
+                ],
+
+                // Configuration for default features
+                defaultPageLength: 5,
+                pageLengthOptions: [5, 10, 15, 20],
+                columnGroups: [
+                    { label: 'Basic Details', colspan: 5 },
+                    { label: 'Employement Details', colspan: 1 },
+                    { label: 'Action', colspan: 2 },
+                ],
+                defaultGroupBy: 'city', // Default grouping
+                theme: 'dark', // Default theme
+
+                // --- CORRECTED Checkbox Function ---
+                // Define the action for the "Select All" checkbox
+                onSelectAll: function(isChecked, allSelectedRows) {
+                    console.clear();
+                    if (isChecked) {
+                        console.log(`${allSelectedRows.length} rows have been selected.`);
+                        // Example: Get all selected employee codes
+                        const selectedCodes = allSelectedRows.map(row => row.name);
+                        console.log("Selected Emp Names:", selectedCodes);
+                        
+                        // You can now perform a bulk action, e.g., show a "Delete All" button.
+                    } else {
+                        console.log('All rows have been deselected.');
+                    }
+                },
+                
+                // Your existing onCheckboxChange for single rows
+                onCheckboxChange: function(isChecked, rowData, selectedRows) {
+                    console.clear();
+                    // ✅ CHANGED: Use the correct key 'emp_code' instead of 'id'
+                    console.log(`Row with Emp Name ${rowData.name} was ${isChecked ? 'checked' : 'unchecked'}.`);
+                    
+                    if (selectedRows.length > 0) {
+                        // ✅ CHANGED: Use the correct key 'emp_code' instead of 'id'
+                        console.log('Currently selected Emp Name:', selectedRows.map(row => row.name));
+                    } else {
+                        console.log('No rows are currently selected.');
+                    }
+                },
+
+                // --- NEW: Add onRowCreate for row-level styling ---
+                onRowCreate: function(rowData, tr) {
+                    // Example: If employee is not active, give the whole row a light red background
+                    if (rowData.salary === null) {
+                        tr.classList.add('row-inactive');
+                    }
+                },
+
+                // fire this whenever any cell is changed
+                onCellEdit: (colKey, newVal, row) => {
+                    console.log(`Edited ${colKey}→`, newVal, 'in row', row);
+                    // e.g. send PATCH to your server here…
+                },
+            };
+            
+            // Create a new instance of the table
+            const myTable = new VikCraftDataTable('#my-advanced-table', tableConfiguration);
+
+
+            // Add event listeners for theme buttons
+            document.getElementById('theme-default').addEventListener('click', () => myTable.setTheme('default'));
+            document.getElementById('theme-dark').addEventListener('click', () => myTable.setTheme('dark'));
+            document.getElementById('theme-narrow').addEventListener('click', () => myTable.setTheme('narrow'));
+        });
+    </script>
+
+</body>
+</html>
