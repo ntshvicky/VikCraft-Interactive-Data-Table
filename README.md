@@ -364,5 +364,5 @@ After initializing `VikCraftDataTable`, you can access its public methods:
 
 ## 📜 License
 
-This project is open-source and available under the **MIT License**.
+This project is developed by **Nitish Srivastava** and open-source.
 
