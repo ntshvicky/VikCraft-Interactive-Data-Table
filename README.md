@@ -2,7 +2,7 @@
 
 VikCraft Interactive Data Table is a lightweight yet powerful JavaScript library for creating highly customizable and interactive data tables. It supports both client-side and server-side data processing, offering features like sorting, searching, pagination, column filtering, grouping, inline editing, and Excel export.
 
-[VikCraftDT]: https://vikcraftpro.nitishsrivastava.com
+[VikCraftDT]: https://vikcraftpro.nitishsrivastava.com/datatable/index.html
 For a demonstration, visit the [VikCraft Interactive Data Table demo][VikCraftDT].
 You can also find the full documentation on their [website][VikCraftDT].
 
